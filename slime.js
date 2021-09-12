@@ -16,7 +16,7 @@ var nSlider = document.getElementById('nSlider');
 
 var widthParticle = 3;
 var nMax = Number(nSlider.max);				// maximum number of molecules
-var N = 100;									// current number of molecules
+var N = Number(nSlider.value);									// current number of molecules
 var InitialSpeed = 0.6;  
 var stepsPerFrame = 2;
 var colorParticle = "red";
@@ -34,17 +34,6 @@ var  x = new Array(nMax),  y = new Array(nMax);
 var vx = new Array(nMax), vy = new Array(nMax);
 var direction = new Array(nMax);
 
-changeN ()
-for (var i=0; i<N; i++) {
-    //x[i] = Math.random() * canvas.width;  //small bug when particles spawn at edge
-    //y[i] = Math.random() * canvas.height;
-    x[i] = canvas.width / 2;  //Position of particle
-    y[i] = canvas.height / 2;
-    vx[i] = InitialSpeed;     //Velocity of particles (maybe change this...)
-    vy[i] = InitialSpeed;     
-    direction[i] = Math.random()*2*Math.PI; 
-}
-
 
 // Color background 
 function changeBg () {
@@ -53,6 +42,16 @@ function changeBg () {
 }
 changeBg () 
  
+for (var i=0; i<N; i++) {
+    //x[i] = Math.random() * canvas.width;  
+    //y[i] = Math.random() * canvas.height;
+    x[i] = canvas.width / 2; 
+    y[i] = canvas.height / 2;
+    vx[i] = InitialSpeed;     
+    vy[i] = InitialSpeed;     
+    direction[i] = Math.random()*2*Math.PI; 
+}
+
 function moveSlime() {
 
     for (var step=0; step<stepsPerFrame; step++) {
@@ -136,7 +135,28 @@ function Trailfade(){
 }
 
 function changeN(){
-
+    var newN = Number(nSlider.value);
+    if (newN > N){
+        for (var i=N+1; i<=newN; i++) {
+            //x[i] = Math.random() * canvas.width;  
+            //y[i] = Math.random() * canvas.height;
+            x[i] = canvas.width / 2; 
+            y[i] = canvas.height / 2;
+            vx[i] = InitialSpeed;    
+            vy[i] = InitialSpeed;     
+            direction[i] = Math.random()*2*Math.PI; 
+        }
+    }
+    else if (newN < N){
+        for (var i=newN+1; i<=N; i++) {
+            y[i] = 0;
+            x[i] = 0;
+            vx[i] = 0;    
+            vy[i] = 0;     
+            direction[i] = 0; 
+        }
+    }
+    N = newN;
 }
 
 paintCanvas();
